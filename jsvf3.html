@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validation Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #eef2fa 0%, #a9bedb 100%);
+      min-height: 100vh;
+    }
+    .header {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .header img {
+      width: 100px;
+    }
+    .header h1 {
+      font-size: 28px;
+      color: #333;
+      margin: 10px 0 5px;
+    }
+
+    .header p {
+      color: #555;
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .form-container {
+      max-width: 400px;
+      background: #fff;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px #ccc;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .required {
+      color: red;
+      font-size: 13px;
+      display: none;
+    }
+
+    .gender-group,
+    .skills-group {
+      margin-bottom: 10px;
+    }
+
+    .asterisk {
+      color: red;
+    }
+
+    textarea {
+      resize: none;
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background: #a925ad;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #5f1352;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="naukri-logo-hd.png" alt ="Logo">
+    <h1>Job Application Form</h1>
+    <p>Fill out the form below to apply for your desired position</p>
+  </div>
+  <div class="form-container">
+    <form id="myForm" autocomplete="off" onsubmit="return validateForm()">
+      <div class="form-group">
+        <label for="name">Name: <span class="asterisk">*</span></label>
+        <input type="text" id="name" name="name" title="Enter your name" placeholder="Enter your name">
+        <div class="required" id="nameError">*Required field — only letters and spaces allowed</div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email: <span class="asterisk">*</span></label>
+        <input type="email" id="email" name="email" title="Enter your email" placeholder="Enter your mail">
+        <div class="required" id="emailError">*Required field — must be a valid Gmail address (example@gmail.com)</div>
+      </div>
+      <div class="form-group">
+        <label for="number">Number: <span class="asterisk">*</span></label>
+        <input type="tel" id="number" name="number" title="Enter your number" placeholder="Enter your number">
+        <div class="required" id="numberError">*Required field — must be exactly 10 digits</div>
+      </div>
+      <div class="form-group">
+        <label for="age">Age: <span class="asterisk">*</span></label>
+        <input type="number" id="age" name="age" title="Enter your age" placeholder="Enter your age" min="1" max="120">
+        <div class="required" id="ageError">*Required field — enter a valid age (1-120)</div>
+      </div>
+      <div class="form-group gender-group">
+        <label>Gender: <span class="asterisk">*</span></label>
+        <input type="radio" id="male" name="gender" title="gender" placeholder="gender"  value="Male"> Male
+        <input type="radio" id="female" name="gender" title="gender" placeholder="gender" value="Female"> Female
+        <div class="required" id="genderError">*Required field</div>
+      </div>
+      <div class="form-group skills-group">
+        <label>Skills: <span class="asterisk">*</span></label>
+        <input type="checkbox" name="skills"title="skills" placeholder="skills" value="HTML">HTML
+        <input type="checkbox" name="skills"title="skills" placeholder="skills" value="CSS"> CSS
+        <input type="checkbox" name="skills" title="skills" placeholder="skills" value="JS"> JS
+        <div class="required" id="skillsError">*Required field</div>
+      </div>
+      <div class="form-group">
+        <label>Qualification: <span class="asterisk">*</span></label>
+        <select id="qualification" name="qualification" title="Select your qualification">
+          <option value="">Select</option>
+          <option value="10th">10th</option>
+          <option value="12th">12th</option>
+          <option value="Graduate">Graduate</option>
+          <option value="Post Graduate">Post Graduate</option>
+        </select>
+        <div class="required" id="qualificationError">*Required field</div>
+      </div>
+      <div class="form-group">
+  <label for="message">Message: <span class="asterisk">*</span></label>
+  <textarea id="message" name="message" title="Enter your message" placeholder="Write your message here..." rows="10"></textarea>
+      <div class="required" id="messageError">*Required field — please enter a message</div>
+      </div>
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    function validateForm() {
+      var valid = true;
+      document.querySelectorAll('.required').forEach(function(el) {
+        el.style.display = 'none';
+      });
+
+      var name = document.getElementById('name').value.trim();
+      var nameRegex = /^[A-Za-z ]+$/;
+      if (name === '' || !nameRegex.test(name)) {
+        document.getElementById('nameError').style.display = 'block';
+        valid = false;
+      }
+      var email = document.getElementById('email').value.trim();
+      var gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
+      if (email === '' || !gmailRegex.test(email)) {
+        document.getElementById('emailError').style.display = 'block';
+        valid = false;
+      }
+      var number = document.getElementById('number').value.replace(/\D/g, '');
+      if (number.length !== 10) {
+        document.getElementById('numberError').style.display = 'block';
+        valid = false;
+      }
+      var ageVal = document.getElementById('age').value.trim();
+      var age = Number(ageVal);
+      if (ageVal === '' || isNaN(age) || age < 1 || age > 120) {
+        document.getElementById('ageError').style.display = 'block';
+        valid = false;
+      }
+      if (!document.querySelector('input[name="gender"]:checked')) {
+        document.getElementById('genderError').style.display = 'block';
+        valid = false;
+      }
+      var skills = document.querySelectorAll('input[name="skills"]:checked');
+      if (skills.length === 0) {
+        document.getElementById('skillsError').style.display = 'block';
+        valid = false;
+      }
+      if (document.getElementById('qualification').value.trim() === '') {
+        document.getElementById('qualificationError').style.display = 'block';
+        valid = false;
+      }
+      var message = document.getElementById('message').value.trim();
+      if (message === '') {
+         document.getElementById('messageError').style.display = 'block';
+         valid = false;
+      }
+      if (valid) {
+        alert("Form is valid — ready to submit.");
+        document.getElementById("myForm").reset();
+        return false;
+      }
+      return false;
+    }
+
+    // live validation: remove error when corrected
+    function addLiveValidation() {
+      var nameInput = document.getElementById('name');
+      var emailInput = document.getElementById('email');
+      var numberInput = document.getElementById('number');
+      var ageInput = document.getElementById('age');
+      var genderInputs = document.querySelectorAll('input[name="gender"]');
+      var skillsInputs = document.querySelectorAll('input[name="skills"]');
+      var qualification = document.getElementById('qualification');
+      var messageInput = document.getElementById('message');
+
+      nameInput.addEventListener('input', function() {
+        var nameRegex = /^[A-Za-z ]+$/;
+        if (this.value.trim() !== '' && nameRegex.test(this.value.trim())) {
+          document.getElementById('nameError').style.display = 'none';
+        }
+      });
+
+      emailInput.addEventListener('input', function() {
+        var gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
+        if (this.value.trim() !== '' && gmailRegex.test(this.value.trim())) {
+          document.getElementById('emailError').style.display = 'none';
+        }
+      });
+
+      numberInput.addEventListener('input', function() {
+        var digits = this.value.replace(/\D/g, '');
+        if (digits.length === 10) {
+          document.getElementById('numberError').style.display = 'none';
+        }
+      });
+
+      ageInput.addEventListener('input', function() {
+        var val = this.value.trim();
+        var n = Number(val);
+        if (val !== '' && !isNaN(n) && n >=1 && n <= 120) {
+          document.getElementById('ageError').style.display = 'none';
+        }
+      });
+
+      genderInputs.forEach(function(g) {
+        g.addEventListener('change', function() {
+          if (document.querySelector('input[name="gender"]:checked')) {
+            document.getElementById('genderError').style.display = 'none';
+          }
+        });
+      });
+
+      skillsInputs.forEach(function(s) {
+        s.addEventListener('change', function() {
+          if (document.querySelectorAll('input[name="skills"]:checked').length > 0) {
+            document.getElementById('skillsError').style.display = 'none';
+          }
+        });
+      });
+
+      qualification.addEventListener('change', function() {
+        if (this.value.trim() !== '') {
+          document.getElementById('qualificationError').style.display = 'none';
+        }
+      });
+      messageInput.addEventListener('input', function() {
+        if (this.value.trim() !== '') {
+          document.getElementById('messageError').style.display = 'none';
+       }
+      });
+    }
+    addLiveValidation();
+  </script>
+</body>
+</html>
